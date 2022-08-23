@@ -1,0 +1,11 @@
+{{#content "title"}}
+    Пользователи
+{{/content}}
+
+{{#content "body"}}
+    <ul>
+        {{#each users}}
+            <li>{{ this.login }}</li>
+        {{/each}}
+    </ul>
+{{/content}}

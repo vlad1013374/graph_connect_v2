@@ -1,0 +1,27 @@
+{{#content "title"}}
+    Посты
+{{/content}}
+
+
+{{#content "navbar"}}
+    Посты
+{{/content}}
+
+
+{{#content "body"}}
+
+ 
+    <ul>
+        {{#each posts}}
+            {{#with this as |post|}}
+                <li>{{ post.description }}</li>
+                
+                {{#each post.photos}}
+                    
+                    {{{img this.fileName}}}
+                        
+                {{/each}}
+            {{/with}}
+        {{/each}}
+    </ul>
+{{/content}}

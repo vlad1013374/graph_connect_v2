@@ -19,29 +19,27 @@ export class UsersService {
     }
 
     async getAllUsers() {
-        const users = this.userRepository.findAll({include:{all:true}});
-        return users;
+        const users = await (await this.userRepository.findAll({ include: { all: true } }))
+            .map(user => user.get({ plain: true }));
+        
+        return {users};
     }
 
     async getUserByLogin(login: string) {
-        const user = this.userRepository.findOne({ where: { login }, include:Role });
+        const user = await this.userRepository.findOne({ where: { login }, include:Role });
         return user;
     }
 
     async getUserByEmail(email: string) {
-        const user = this.userRepository.findOne({ where: { email }, include:Role });
+        const user = await this.userRepository.findOne({ where: { email }, include:Role });
         return user;
     }
 
     async activateUserByLink(activationLink: string) {
-        return await this.userRepository.findOne({where: {activationLink}})
-        .then( user => {
-            user.isActivate = true
-            return user.save();
-        })
-        .catch( error => {
-            throw new UnauthorizedException({message:"Пользователь не найден!"}); 
-        });
+        const user = await this.userRepository.findOne({where: {activationLink}});
+        const activatedRole = await this.rolesService.getRoleByValue("ACTIVATED-USER");
+        user.$add('roles', [activatedRole.id])
+        return user;
         
     }
 }

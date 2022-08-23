@@ -16,6 +16,8 @@ export class PhotoAlbumsService {
         return await this.albumRepository.findOne({where: {user_id, type_id}});
     }
 
+    
+
     async createAlbumByValue(user_id: number, type_value: string) {
         const albumType = await this.albumTypesRepository.findOne({where: {value: type_value}});
         return await this.albumRepository.create({user_id, name: albumType.name, type_id: albumType.id})

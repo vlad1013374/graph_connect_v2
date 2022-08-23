@@ -17,6 +17,7 @@ import { PhotoAlbumsModule } from './photo_albums/photo_albums.module';
 import { PhotoAlbum } from './photo_albums/photo_albums.model';
 import { PhotoAlbumDefaultTypes } from './photo_albums/albums_default_types.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { MessagesModule } from './messages/messages.module';
 import * as path from 'path';
 
 @Module({
@@ -25,9 +26,9 @@ import * as path from 'path';
       envFilePath: `.${process.env.NODE_ENV}.env`
     }),
 
-    ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, 'static'),
-    }),
+    /* ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, "static")
+    }), */
 
     SequelizeModule.forRoot({
       dialect: 'mysql',
@@ -52,7 +53,9 @@ import * as path from 'path';
 
     FileModule,
 
-    PhotoAlbumsModule
+    PhotoAlbumsModule,
+
+    MessagesModule
     
   ],
   controllers: [],

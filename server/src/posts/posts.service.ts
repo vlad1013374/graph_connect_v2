@@ -12,8 +12,23 @@ export class PostsService {
         private photosService: PhotosService
     ) {}
 
+    async getAllPosts() {
+        const posts = await (await this.postsRepository.findAll({
+
+            include: {
+                model: Photo,
+                attributes: ["id", "fileName", "createdAt"],
+                through: {
+                    attributes: []
+                }
+            }
+        })).map( post => post.get({ plain: true }))
+        
+        return {posts};
+    }
+
     async getAllPostsByUserId(user_id) {
-        const posts = this.postsRepository.findAll({
+        const posts = await (await this.postsRepository.findAll({
             where: {user_id}, 
             include: {
                 model: Photo,
@@ -22,8 +37,9 @@ export class PostsService {
                     attributes: []
                 }
             }
-        })
-        return posts;
+        })).map( post => post.get({ plain: true }))
+        
+        return {posts, isAuth:true};
     }
 
     async createPost(user_id: number, createDto: CreatePostDto, photos: Array<Express.Multer.File>) {

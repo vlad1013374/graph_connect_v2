@@ -14,10 +14,10 @@ export class RolesAuthGuard implements CanActivate{
         const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
             context.getHandler(),
             context.getClass(),
-          ]);
-          if(!requiredRoles) {
+        ]);
+        if(!requiredRoles) {
             return true;
-          }
+        }
         const req = context.switchToHttp().getRequest();
 
         try {

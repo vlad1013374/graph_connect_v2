@@ -10,8 +10,8 @@ import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
 export class AuthService {
     constructor(private userService: UsersService,
-                private jwtService: JwtService,
-                @Inject('COMMUNICATION') private readonly communicationClient: ClientProxy) {}
+                private jwtService: JwtService
+                ) {}
 
     async registration(userDto: CreateUserDto) {
         if ( await this.userService.getUserByEmail(userDto.email) || await this.userService.getUserByLogin(userDto.login)) {
@@ -26,16 +26,12 @@ export class AuthService {
 
     async login(userDto: LoginAuthDto) {
         const user = await this.checkUser(userDto);
-        this.communicationClient.emit(
-            'user_logged',
-            user.login
-        );
-        return this.generateToken(user);
+        return await this.generateToken(user);
     }
 
 
-    private async generateToken( user: User) {
-        const payload = {id: user.id, login: user.login, isActivate:user.isActivate, roles: user.roles};
+    private generateToken( user: User){
+        const payload = {id: user.id, login: user.login, roles: user.roles};
         return {
             token: this.jwtService.sign(payload)
         }
